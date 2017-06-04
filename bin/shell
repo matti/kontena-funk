@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+set -e
+export RACK_ENV=${RACK_ENV:-development}
+export COMMAND=$1
+
+docker-compose up -d --build --force-recreate funk-shell
+docker attach kontena-funk-shell

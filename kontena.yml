@@ -1,0 +1,113 @@
+stack: matti/kontena-funk
+version: 0.0.1
+description: kontena-funk
+
+expose: web
+
+variables:
+  kontena_url:
+    type: string
+    required: true
+    from:
+      prompt: KONTENA_URL
+
+  kontena_token:
+    type: string
+    required: true
+    from:
+      prompt: KONTENA_TOKEN
+
+  kontena_grid:
+    type: string
+    required: true
+    from:
+      prompt: KONTENA_GRID
+
+  funk_timeout:
+    type: integer
+    required: true
+    default: 60
+    from:
+      prompt: FUNK_TIMEOUT
+
+  lb_service:
+    type: string
+    required: false
+    from:
+      service_link:
+        prompt: Pick a loadbalancer
+        image: kontena/lb
+        name: lb
+
+  lb_domain:
+    only_if: lb_service
+    type: string
+    min_length: 1
+    default: kontena-funk.kontena.rocks
+    from:
+      prompt:
+
+  lb_https_redirect:
+    only_if: lb_service
+    type: boolean
+    default: false
+    from:
+      prompt: Force kontena/lb to redirect SSL if request is not SSL?
+
+  lb_https_redirect_forwarded:
+    only_if: lb_service
+    type: boolean
+    default: false
+    from:
+      prompt: Force kontena/lb to redirect SSL if header X-Forwarded-Proto is not https?
+
+services:
+  web:
+    image: mattipaksula/kontena-funk
+    deploy:
+      strategy: ha
+      wait_for_port: 8080
+      min_health: 0.5
+      interval: 24h
+    instances: 1
+    affinity:
+      - label!=no-kontena-funk-web
+    environment:
+      - RACK_ENV=production
+      - KONTENA_URL={{ kontena_url }}
+      - KONTENA_TOKEN={{ kontena_token }}
+      - KONTENA_GRID={{ kontena_grid }}
+      - FUNK_TIMEOUT={{ funk_timeout }}
+      - KONTENA_LB_MODE=http
+      - KONTENA_LB_INTERNAL_PORT=8080
+      - KONTENA_LB_VIRTUAL_HOSTS={{ lb_domain }}
+      # {% if lb_https_redirect %}
+      - KONTENA_LB_CUSTOM_SETTINGS=redirect scheme https if !{ ssl_fc }
+      # {% endif %}
+      # {% if lb_https_redirect_forwarded %}
+      - KONTENA_LB_CUSTOM_SETTINGS=redirect scheme https if !{ hdr(X-Forwarded-Proto) -i https }
+      # {% endif %}
+    health_check:
+      protocol: http
+      port: 8080
+      interval: 10
+      uri: /health
+      initial_delay: 30
+      timeout: 2
+    links:
+      - {{ lb_service }}
+
+  cleaner:
+    image: mattipaksula/kontena-funk
+    deploy:
+      strategy: ha
+      interval: 1h
+    instances: 1
+    affinity:
+      - label!=no-kontena-funk-cleaner
+    environment:
+      - FUNK_TIMEOUT={{ funk_timeout }}
+      - KONTENA_URL={{ kontena_url }}
+      - KONTENA_TOKEN={{ kontena_token }}
+      - KONTENA_GRID={{ kontena_grid }}
+    command: ./cleaner.sh

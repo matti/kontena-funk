@@ -1,8 +1,6 @@
 #!/usr/bin/env sh
 set -e
-
 export RACK_ENV=${RACK_ENV:-development}
-
-docker-compose build
-docker-compose up -d
+docker-compose up -d --build --force-recreate funk-cleaner
+docker-compose up -d --build --force-recreate funk-api
 docker attach kontena-funk-api

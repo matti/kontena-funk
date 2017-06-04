@@ -1,17 +1,32 @@
 version: '2.1'
 
 services:
-  api:
-    image: mattipaksula/kontena-funk-api
+  funk:
+    image: mattipaksula/kontena-funk
     build:
-      context: api
+      context: funk
       args:
         RACK_ENV: ${RACK_ENV:-production}
-
-    container_name: kontena-funk-api
-    ports:
-      - 4567:8080
+    tty: true
+    stdin_open: true
+    env_file: .env
     environment:
       - RACK_ENV=${RACK_ENV:-production}
     volumes:
-      - ./api:/app
+      - ./funk:/app
+
+  funk-api:
+    extends: funk
+    container_name: kontena-funk-api
+    ports:
+      - 4567:8080
+
+  funk-cleaner:
+    extends: funk
+    container_name: kontena-funk-cleaner
+    command: ./cleaner.sh
+
+  funk-shell:
+    extends: funk
+    container_name: kontena-funk-shell
+    command: ${COMMAND}
