@@ -1,0 +1,17 @@
+version: '2.1'
+
+services:
+  api:
+    image: mattipaksula/kontena-funk-api
+    build:
+      context: api
+      args:
+        RACK_ENV: ${RACK_ENV:-production}
+
+    container_name: kontena-funk-api
+    ports:
+      - 4567:8080
+    environment:
+      - RACK_ENV=${RACK_ENV:-production}
+    volumes:
+      - ./api:/app
