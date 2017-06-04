@@ -2,7 +2,7 @@
 
 serverless functions with Kontena scheduling.
 
-## demo:
+## demo
 
 ```
 $ curl -G --data-urlencode "image=alpine:3.5" --data-urlencode "cmd=df -h" funk.yourgrid.com/v1
@@ -23,6 +23,13 @@ tmpfs                     1.8G         0      1.8G   0% /proc/timer_list
 tmpfs                     1.8G         0      1.8G   0% /proc/timer_stats
 tmpfs                     1.8G         0      1.8G   0% /proc/sched_debug
 ```
+
+## what?
+
+- Creates a Kontena service named `f-UUID-UUID-UUID-UUID` from the requested container with `sleep TIMEOUT`
+- `kontena service exec`s the cmd to the container
+- Removes the service, returns the output
+- [cleans orphaned services every TIMEOUT+1s]
 
 ## setup
 
