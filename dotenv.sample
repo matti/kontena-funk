@@ -1,0 +1,5 @@
+KONTENA_URL=https://kontena-master.herokuapp.com
+KONTENA_TOKEN=abbacd1234
+KONTENA_GRID=mygrid
+FUNK_TIMEOUT=60
+FUNK_AFFINITY=label==funk=yes

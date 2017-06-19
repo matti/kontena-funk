@@ -15,8 +15,9 @@ echo "uuid: $FUNK_UUID"
 echo "image: $FUNK_IMAGE"
 echo "cmd: $FUNK_CMD"
 echo "timeout: $FUNK_TIMEOUT"
+echo "affinity: $FUNK_AFFINITY"
 
-kontena service create --cmd "sleep $FUNK_TIMEOUT" --instances 1 $FUNK_SERVICE $FUNK_IMAGE
+kontena service create --affinity "$FUNK_AFFINITY" --cmd "sleep $FUNK_TIMEOUT" --instances 1 $FUNK_SERVICE $FUNK_IMAGE
 kontena service start $FUNK_SERVICE
 
 while true; do
