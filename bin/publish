@@ -3,4 +3,4 @@ set -e
 
 export RACK_ENV=production
 docker-compose build
-docker-compose push
+docker-compose push funk
