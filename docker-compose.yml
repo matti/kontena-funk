@@ -9,6 +9,7 @@ services:
         RACK_ENV: ${RACK_ENV:-production}
     tty: true
     stdin_open: true
+    restart: unless-stopped
     env_file: .env
     environment:
       - RACK_ENV=${RACK_ENV:-production}
