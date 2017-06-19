@@ -43,6 +43,7 @@ Pick a loadbalancer lb-ingress/lb
 > KONTENA_TOKEN : abbacdabbacd
 > KONTENA_GRID : yourgrid
 > FUNK_TIMEOUT : 60
+> FUNK_AFFINITY : label==funk=yes
 > Enter lb_domain : func.mygrid.com
 > Force kontena/lb to redirect SSL if request is not SSL? : depends
 > Force kontena/lb to redirect SSL if header X-Forwarded-Proto is not https? : depends
