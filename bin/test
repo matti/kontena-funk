@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+curl -G --data-urlencode "image=alpine:3.5" --data-urlencode "cmd=df -h" localhost:4567/v1
