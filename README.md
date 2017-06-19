@@ -47,3 +47,13 @@ Pick a loadbalancer lb-ingress/lb
 > Force kontena/lb to redirect SSL if request is not SSL? : depends
 > Force kontena/lb to redirect SSL if header X-Forwarded-Proto is not https? : depends
 ```
+
+## dev
+
+```
+[RACK_ENV=development] bin/serve
+```
+
+# TODO
+
+- `output_` files can be left behind, write a cleaner
