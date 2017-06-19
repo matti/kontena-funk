@@ -1,34 +1,40 @@
 stack: matti/kontena-funk
 version: 0.0.1
-description: kontena-funk
+description: serverless functions for Kontena with services
 
 expose: web
 
 variables:
-  kontena_url:
+  KONTENA_URL:
     type: string
     required: true
     from:
       prompt: KONTENA_URL
 
-  kontena_token:
+  KONTENA_TOKEN:
     type: string
     required: true
     from:
       prompt: KONTENA_TOKEN
 
-  kontena_grid:
+  KONTENA_GRID:
     type: string
     required: true
     from:
       prompt: KONTENA_GRID
 
-  funk_timeout:
+  FUNK_TIMEOUT:
     type: integer
     required: true
     default: 60
     from:
       prompt: FUNK_TIMEOUT
+
+  FUNK_AFFINITY:
+    type: string
+    required: true
+    from:
+      prompt: FUNK_AFFINITY
 
   lb_service:
     type: string
@@ -74,10 +80,12 @@ services:
       - label!=no-kontena-funk-web
     environment:
       - RACK_ENV=production
-      - KONTENA_URL={{ kontena_url }}
-      - KONTENA_TOKEN={{ kontena_token }}
-      - KONTENA_GRID={{ kontena_grid }}
-      - FUNK_TIMEOUT={{ funk_timeout }}
+      - KONTENA_URL={{ KONTENA_URL }}
+      - KONTENA_TOKEN={{ KONTENA_TOKEN }}
+      - KONTENA_GRID={{ KONTENA_GRID }}
+      - FUNK_TIMEOUT={{ FUNK_TIMEOUT }}
+      - FUNK_AFFINITY={{ FUNK_AFFINITY }}
+      # {% if lb_service %}
       - KONTENA_LB_MODE=http
       - KONTENA_LB_INTERNAL_PORT=8080
       - KONTENA_LB_VIRTUAL_HOSTS={{ lb_domain }}
@@ -87,15 +95,18 @@ services:
       # {% if lb_https_redirect_forwarded %}
       - KONTENA_LB_CUSTOM_SETTINGS=redirect scheme https if !{ hdr(X-Forwarded-Proto) -i https }
       # {% endif %}
+      # {% endif %}
     health_check:
       protocol: http
       port: 8080
-      interval: 10
+      interval: 60
       uri: /health
       initial_delay: 30
       timeout: 2
+    # {% if lb_service %}
     links:
       - {{ lb_service }}
+    # {% endif %}
 
   cleaner:
     image: mattipaksula/kontena-funk
@@ -106,8 +117,8 @@ services:
     affinity:
       - label!=no-kontena-funk-cleaner
     environment:
-      - FUNK_TIMEOUT={{ funk_timeout }}
-      - KONTENA_URL={{ kontena_url }}
-      - KONTENA_TOKEN={{ kontena_token }}
-      - KONTENA_GRID={{ kontena_grid }}
+      - FUNK_TIMEOUT={{ FUNK_TIMEOUT }}
+      - KONTENA_URL={{ KONTENA_URL }}
+      - KONTENA_TOKEN={{ KONTENA_TOKEN }}
+      - KONTENA_GRID={{ KONTENA_GRID }}
     command: ./cleaner.sh
