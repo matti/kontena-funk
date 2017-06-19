@@ -17,16 +17,14 @@ services:
 
   funk-api:
     extends: funk
-    container_name: kontena-funk-api
     ports:
       - 4567:8080
 
   funk-cleaner:
     extends: funk
-    container_name: kontena-funk-cleaner
     command: ./cleaner.sh
+    restart: unless-stopped
 
   funk-shell:
     extends: funk
-    container_name: kontena-funk-shell
     command: ${COMMAND}

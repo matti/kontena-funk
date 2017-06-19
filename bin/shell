@@ -4,4 +4,4 @@ export RACK_ENV=${RACK_ENV:-development}
 export COMMAND=$1
 
 docker-compose up -d --build --force-recreate funk-shell
-docker attach kontena-funk-shell
+docker attach kontenafunk_funk-shell_1

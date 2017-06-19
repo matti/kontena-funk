@@ -3,4 +3,7 @@ set -e
 export RACK_ENV=${RACK_ENV:-development}
 docker-compose up -d --build --force-recreate funk-cleaner
 docker-compose up -d --build --force-recreate funk-api
-docker attach kontena-funk-api
+docker-compose logs funk-cleaner
+docker-compose logs funk-api
+
+docker attach kontenafunk_funk-api_1
