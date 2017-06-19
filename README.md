@@ -52,6 +52,7 @@ Pick a loadbalancer lb-ingress/lb
 
 ```
 [RACK_ENV=development] bin/serve
+bin/test
 ```
 
 # TODO
