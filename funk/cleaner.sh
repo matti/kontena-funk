@@ -1,7 +1,17 @@
 #!/usr/bin/env sh
+set -e
 
+echo "Cleaner starting.."
 while true; do
-  funk_services=$(kontena service ls | cut -f2 -d' ' | grep "^f-")
+  set +e
+    funk_services=$(kontena service ls -q | grep "/f-")
+  set -e
+
+  echo "Current services:"
+  printf "$funk_services"
+  echo ""
+  echo "--"
+
   echo "$(date) sleeping for $FUNK_TIMEOUT+1"
   sleep $FUNK_TIMEOUT
   sleep 1
@@ -14,4 +24,6 @@ while true; do
     set -e
   done
   echo "$(date) cleaning completed."
+
+  sleep 1
 done
