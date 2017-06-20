@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-cmd=$1
+cmd=${@:-df -h}
 
 curl -G \
   --data-urlencode "image=alpine:3.5" \

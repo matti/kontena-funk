@@ -1,5 +1,16 @@
 require "sinatra"
+require "sinatra/streaming"
 require "kommando"
+
+class IO
+  def read_nonblocking(size)
+    return read_nonblock(size)
+  rescue IO::EAGAINWaitReadable
+    return ""
+  rescue EOFError
+    return nil
+  end
+end
 
 if settings.development?
   require "pry-byebug"
@@ -27,13 +38,26 @@ get "/v1" do
   end
   env_file.close
 
-  Kommando.run "./run.sh #{uuid} #{timeout} #{image} #{cmd}", {
+  k = Kommando.run_async "./run.sh #{uuid} #{timeout} #{image} #{cmd}", {
     output: true
   }
-  output = File.read "output_#{uuid}"
-  File.unlink "output_#{uuid}"
 
-  output
+  output_file = "output_#{uuid}"
+
+  loop do
+    break if File.exist? output_file
+    sleep 0.1
+  end
+
+  io = IO.popen("tail -f #{output_file}")
+  stream do |out|
+    loop do
+      s = io.read_nonblocking(4096)
+      out.write s
+      break if k.code
+    end
+    out.flush
+  end
 end
 
 get "/health" do

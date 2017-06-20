@@ -1,8 +1,12 @@
 #!/usr/bin/env sh
 set -e
 export RACK_ENV=${RACK_ENV:-development}
-docker-compose up -d --build --force-recreate funk-cleaner
-docker-compose up -d --build --force-recreate funk-api
+
+docker-compose kill funk-api funk-cleaner
+docker-compose rm --force funk-api funk-cleaner
+
+docker-compose up -d --build funk-api funk-cleaner
+
 docker-compose logs funk-cleaner
 docker-compose logs funk-api
 

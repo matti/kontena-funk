@@ -9,19 +9,22 @@ FUNK_CMD=$@
 
 FUNK_SERVICE=f-$FUNK_UUID
 FUNK_OUTPUT=output_$FUNK_UUID
+FUNK_COMPLETED=completed_$FUNK_UUID
 FUNK_ENV=env_$FUNK_UUID
 env_args=$(cat $FUNK_ENV)
 
-echo "funk runner starting"
+echo "
+-- funk runner starting"
 echo "uuid: $FUNK_UUID"
 echo "timeout: $FUNK_TIMEOUT"
 echo "affinity: $FUNK_AFFINITY"
-echo "----"
 echo "image: $FUNK_IMAGE"
 echo "cmd: $FUNK_CMD"
 echo "env_args:
 $env_args"
 
+echo "
+-- creating service"
 kontena service create \
   $env_args \
   --affinity "$FUNK_AFFINITY" \
@@ -30,26 +33,29 @@ kontena service create \
   $FUNK_SERVICE \
   $FUNK_IMAGE
 
+echo "
+-- starting service"
 kontena service start $FUNK_SERVICE
 
+printf "
+-- waiting for containers to appear "
 while true; do
   containers=$(kontena service containers $FUNK_SERVICE)
   if [ "$containers" != "" ]; then
-    echo $containers
+    echo ""
+    printf "$containers"
+    echo ""
     break
   fi
+  printf "."
   sleep 0.1
 done
 
+echo "
+-- service $FUNK_SERVICE exec:"
 set +e
-  output=$(kontena service exec $FUNK_SERVICE $FUNK_CMD > $FUNK_OUTPUT)
-  exec_exit_code=$?
+  kontena service exec $FUNK_SERVICE $FUNK_CMD | tee $FUNK_OUTPUT
 set -e
 
-set +e
-  kontena service rm --force $FUNK_SERVICE
-set -e
-
-set +e
-  rm $FUNK_ENV
-set -e
+# let output be flushed
+sleep 1
