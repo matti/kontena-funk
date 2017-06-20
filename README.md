@@ -76,4 +76,4 @@ bin/test
 
 # TODO
 
-- `output_` files can be left behind, write a cleaner
+- if the cleaner crashes some files can be left behind
