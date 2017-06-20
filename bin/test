@@ -1,3 +1,10 @@
 #!/usr/bin/env sh
 
-curl -G --data-urlencode "image=alpine:3.5" --data-urlencode "cmd=df -h" localhost:4567/v1
+cmd=$1
+
+curl -G \
+  --data-urlencode "image=alpine:3.5" \
+  --data-urlencode "cmd=$cmd" \
+  --header "X-Funk-ENV_FUNK_A: 123" \
+  --header "X-Funk-ENV_FUNK_B: hello" \
+  localhost:4567/v1

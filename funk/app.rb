@@ -19,6 +19,14 @@ get "/v1" do
   return "?image required" unless image
   return "?cmd required" unless cmd
 
+  env_file = File.new "env_#{uuid}", "w"
+  request.env.each_pair do |k,v|
+    next unless matches = k.match(/^HTTP_X_FUNK_ENV_(.*)$/)
+    env = matches[1]
+    env_file.puts "-e #{env}=#{v}"
+  end
+  env_file.close
+
   Kommando.run "./run.sh #{uuid} #{timeout} #{image} #{cmd}", {
     output: true
   }

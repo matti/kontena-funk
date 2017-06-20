@@ -17,6 +17,8 @@ services:
       - ./funk:/app
 
   funk-api:
+    tty: true
+    stdin_open: true
     extends: funk
     ports:
       - 4567:8080

@@ -24,6 +24,24 @@ tmpfs                     1.8G         0      1.8G   0% /proc/timer_stats
 tmpfs                     1.8G         0      1.8G   0% /proc/sched_debug
 ```
 
+With environment variables:
+```
+$ curl -G --header "X-Funk-ENV_FUNK_A: 123" --data-urlencode "image=alpine:3.5" --data-urlencode "cmd=/bin/sh -c 'export'" funk.yourgrid.com/v1
+export FUNK_A='123'
+export HOME='/root'
+export HOSTNAME='f-24b5ef6e-4fdb-44c7-ae16-5a2855bba8ec-1'
+export KONTENA_GRID_NAME='yourgrid'
+export KONTENA_NODE_NAME='e-3dsk.c.yourgrid.internal'
+export KONTENA_SERVICE_ID='59493cdfdb8d9500080e53c9'
+export KONTENA_SERVICE_INSTANCE_NUMBER='1'
+export KONTENA_SERVICE_NAME='f-24b5ef6e-4fdb-44c7-ae16-5a2855bba8ec'
+export KONTENA_STACK_NAME='null'
+export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+export PWD='/'
+export SHLVL='1'
+```
+
+
 ## what?
 
 - Creates a Kontena service named `f-UUID-UUID-UUID-UUID` from the requested container with `sleep TIMEOUT`
