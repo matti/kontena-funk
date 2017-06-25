@@ -9,39 +9,46 @@ variables:
     type: string
     required: true
     from:
-      prompt: KONTENA_URL
+      prompt:
 
   KONTENA_TOKEN:
     type: string
     required: true
     from:
-      prompt: KONTENA_TOKEN
+      prompt:
 
   KONTENA_GRID:
     type: string
     required: true
     from:
-      prompt: KONTENA_GRID
+      prompt:
 
   FUNK_TIMEOUT:
     type: integer
     required: true
     default: 60
     from:
-      prompt: FUNK_TIMEOUT
+      prompt:
 
   FUNK_AFFINITY:
     type: string
     required: true
     from:
-      prompt: FUNK_AFFINITY
+      prompt:
+
+  web_image:
+    type: string
+    required: true
+    default: mattipaksula/kontena-funk
+    from:
+      prompt:
 
   lb_service:
     type: string
     required: false
     from:
       service_link:
-        prompt: Pick a loadbalancer
+        prompt: "Pick a loadbalancer"
         image: kontena/lb
         name: lb
 
@@ -69,7 +76,8 @@ variables:
 
 services:
   web:
-    image: mattipaksula/kontena-funk
+    image: {{ web_image }}
+    build: funk
     deploy:
       strategy: ha
       wait_for_port: 8080

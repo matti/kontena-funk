@@ -1,3 +1,4 @@
 .env
 funk/output_*
 funk/env_*
+kontena-build-values.yml
