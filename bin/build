@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+set -e
+
+kontena stack build --no-pull --values-from kontena-build-values.yml
