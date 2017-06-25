@@ -1,10 +1,14 @@
 #!/usr/bin/env sh
 
+endpoint=${1:-localhost:4567}/v1
+shift
 cmd=${@:-df -h}
 
-curl -G \
+echo "endpoint: $endpoint"
+
+curl -L -G \
   --data-urlencode "image=alpine:3.5" \
   --data-urlencode "cmd=$cmd" \
   --header "X-Funk-ENV_FUNK_A: 123" \
   --header "X-Funk-ENV_FUNK_B: hello" \
-  localhost:4567/v1
+  $endpoint
