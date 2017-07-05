@@ -30,4 +30,4 @@ services:
 
   funk-shell:
     extends: funk
-    command: ${COMMAND}
+    command: ${COMMAND:-/bin/sh}
