@@ -63,6 +63,3 @@ echo "
 set +e
   kontena service rm --force $FUNK_SERVICE
 set -e
-
-# let output be flushed
-sleep 1
