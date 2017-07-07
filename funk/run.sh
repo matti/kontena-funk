@@ -30,6 +30,7 @@ kontena service create \
   --affinity "$FUNK_AFFINITY" \
   --cmd "sleep $FUNK_TIMEOUT" \
   --instances 1 \
+  -v /dev/shm:/dev/shm \
   $FUNK_SERVICE \
   $FUNK_IMAGE
 
