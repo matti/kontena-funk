@@ -5,8 +5,7 @@ services:
     image: mattipaksula/kontena-funk
     build:
       context: funk
-      args:
-        RACK_ENV: ${RACK_ENV:-production}
+      dockerfile: Dockerfile.${RACK_ENV:-production}
     tty: true
     stdin_open: true
     restart: unless-stopped
