@@ -57,5 +57,12 @@ set +e
   kontena service exec $FUNK_SERVICE $FUNK_CMD | tee $FUNK_OUTPUT
 set -e
 
+#without this processes started by FUNK_CMD might be running until the timeout
+echo "
+-- service $FUNK_SERVICE rm:"
+set +e
+  kontena service rm --force $FUNK_SERVICE
+set -e
+
 # let output be flushed
 sleep 1
