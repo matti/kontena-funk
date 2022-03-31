@@ -31,6 +31,7 @@ GEM
     multi_json (1.12.1)
     mustermann (1.0.0)
     necromancer (0.4.0)
+    nio4r (2.5.8)
     opto (1.8.5)
     pastel (0.7.1)
       equatable (~> 0.5.0)
@@ -43,7 +44,8 @@ GEM
       byebug (~> 9.0)
       pry (~> 0.10)
     public_suffix (2.0.5)
-    puma (3.9.1)
+    puma (4.3.12)
+      nio4r (~> 2.0)
     rack (2.0.3)
     rack-protection (2.0.0)
       rack
